@@ -1,0 +1,21 @@
+Para insertar las preguntas del Inventario de Fobia Social (SPIN - 2000) en la
+base de datos
+
+INSERT INTO preguntas (descripcion) VALUES
+('Tengo miedo a las figuras de autoridad'),
+('Me molesta sonrojarme delante de las personas'),
+('Las fiestas y los eventos sociales me asustan (o angustian)'),
+('Evito hablar con personas desconocidas'),
+('Me asusta (o angustia) mucho que me critiquen'),
+('Evito hacer cosas o hablar con cierta gente por miedo a sentir vergüenza'),
+('Transpirar delante de otras personas me angustia o estresa'),
+('Evito ir a fiestas'),
+('Evito actividades en las cuales soy el centro de atención'),
+('Hablar con gente desconocida me asusta o angustia'),
+('Evito hablar en público'),
+('Haría cualquier cosa para evitar que me critiquen'),
+('Siento palpitaciones cardíacas cuando estoy con gente desconocida'),
+('Tengo miedo de hacer cosas cuando la gente me está mirando'),
+('Mis mayores miedos son sentirme avergonzada/o o un/a tonto/a'),
+('Evito hablar con cualquier persona con autoridad'),
+('Que los demás me vean titubear, sonrojar o temblar me angustia o estresa');
