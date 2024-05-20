@@ -32,7 +32,7 @@ class PersonController {
 
   async getPersonById(req: Request, res: Response) {
     try {
-      const id = parseInt(req.params.id);
+      const id = req.params.id;
       const person = await PersonService.getPersonById(id);
       if (person) {
         res.status(200).json(person);

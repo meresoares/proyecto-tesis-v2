@@ -1,13 +1,13 @@
-// export default Registro;
-// registro-page.tsx
+// export default RegisterPage;
+// register-page.tsx
 
 import registroImage from '../../images/img-registro.webp';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../styles/login.css';
-import RegistroFormulario from '../../components/formularios/registro-formulario'
+import '../../styles/estilo.css';
+import Register from '../../components/register-component'
 
 
-const Registro: React.FC = () => {
+const RegisterPage: React.FC = () => {
     return (
         <section className="text-center text-lg-start">
 
@@ -19,7 +19,7 @@ const Registro: React.FC = () => {
                             backdropFilter: 'blur(30px)'
                         }}>
                             <div className="card-body p-5 shadow-5 text-center">
-                                <RegistroFormulario />
+                                <Register />
                             </div>
                         </div>
                     </div>
@@ -33,4 +33,4 @@ const Registro: React.FC = () => {
     );
 };
 
-export default Registro;
+export default RegisterPage;

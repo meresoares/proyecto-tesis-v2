@@ -2,7 +2,7 @@
 // Navbar.tsx
 
 import React from 'react';
-import '../styles/login.css';
+import '../styles/estilo.css';
 
 
 interface NavbarProps {
@@ -12,7 +12,7 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ user, handleLogout }) => {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light navbar-custom" >
+    <nav className="navbar navbar-expand-lg navbar-dark navbar-custom" >
       <div className="container-fluid">
         <a className="navbar-brand text-white mx-auto" href="/home">ANSIEDAD - SISTEMA EXPERTO</a>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">

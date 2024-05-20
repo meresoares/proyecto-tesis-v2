@@ -3,7 +3,7 @@ import { ValidationError } from 'sequelize';
 
 // Definición de tipos para las respuestas
 type RespuestaValue = 'Nunca' | 'Muy poco' | 'Un poco' | 'Mucho' | 'Demasiado';
-type Respuestas = Record<string, RespuestaValue>;
+type Respuestas = Array<{ pregunta_id: number; respuesta: RespuestaValue }>;
 type ValoresRespuestas = Record<RespuestaValue, number>;
 
 class SistemaExperto {
@@ -20,29 +20,41 @@ class SistemaExperto {
   evaluarRespuestas(respuestas: Respuestas): string {
     let puntuacion = 0;
 
-    for (const respuesta of Object.values(respuestas)) {
+    // Depuración: Imprimir las respuestas y sus valores
+    console.log("Respuestas y valores: ");
+
+    for (const { respuesta } of respuestas) {
+      console.log(`Respuesta: ${respuesta} (${this.valores[respuesta]})`);
       puntuacion += this.valores[respuesta];
     }
 
+     // Depuración: Imprimir la puntuación total
+     console.log(`Puntuación total: ${puntuacion}`);
+
     // Clasifica el nivel de ansiedad basado en la puntuación
-    if (puntuacion <= 10) {
-      return 'Baja Ansiedad';
-    } else if (puntuacion <= 20) {
-      return 'Ansiedad Moderada';
+    if (puntuacion <= 40) {
+      return 'Ansiedad Social Baja';
+    } else if (puntuacion <= 80) {
+      return 'Ansiedad Social Moderada';
     } else {
-      return 'Alta Ansiedad';
+      return 'Ansiedad Social Alta';
     }
   }
 }
 
+interface CreateRespuestasData {
+  persona_id: string;
+  respuestas: Respuestas;
+}
 
 class RespuestaService {
   private sistemaExperto: SistemaExperto = new SistemaExperto();
 
-  async createRespuesta(respuestaData: Respuestas): Promise<Respuesta> {
+  async createRespuesta(data: CreateRespuestasData): Promise<{resultado: string; respuestas: Respuesta[]}> {
     try {
+      const { persona_id, respuestas } = data;
       // Calcula la evaluación
-      const evaluacion = this.sistemaExperto.evaluarRespuestas(respuestaData);
+      const evaluacion = this.sistemaExperto.evaluarRespuestas(respuestas);
       console.log(`Evaluación calculada: ${evaluacion}`); // Depuración
 
       // Verifica que 'evaluacion' no sea 'null'
@@ -50,15 +62,19 @@ class RespuestaService {
         throw new Error("La evaluación no se ha calculado correctamente.");
       }
 
-      // Crea la respuesta con la evaluación incluida
-      const respuesta = await Respuesta.create({
-        ...respuestaData,
+      // Crea las respuestas con la evaluación incluida
+      const respuestasConEvaluacion = respuestas.map(respuesta => ({
+        ...respuesta,
+        persona_id,
         evaluacion, // Asegúrate de que el modelo Sequelize tiene este campo.
-      });
+      }));
 
-      console.log(`Respuesta creada con evaluación: ${respuesta.evaluacion}`); // Depuración
+      const createdRespuestas = await Respuesta.bulkCreate(respuestasConEvaluacion);
 
-      return respuesta;
+      console.log(`Respuestas creadas con evaluación: ${createdRespuestas.map(r => r.evaluacion)}`); // Depuración
+
+      // Devuelve el resultado de la evaluación junto con las respuestas creadas
+      return { resultado: evaluacion, respuestas: createdRespuestas };
     } catch (error: any) {
       console.error('Error al crear la respuesta:', error); // Depuración
       if (error instanceof ValidationError) {
@@ -66,6 +82,16 @@ class RespuestaService {
       } else {
         throw new Error(`Database Error: ${error.message}`);
       }
+    }
+  }
+
+  async getRespuestaByPersonaId(personaId: string): Promise<string | null> {
+    try {
+      const respuesta = await Respuesta.findOne({ where: { persona_id: personaId }});
+      return respuesta && respuesta.evaluacion !== undefined ? respuesta.evaluacion : null;
+    } catch (error: any) {
+      console.error('Error al obtener el resultado:', error);
+      throw new Error(`Database Error: ${error.message}`);
     }
   }
 }

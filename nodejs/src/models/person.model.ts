@@ -30,16 +30,16 @@ Person.init({
     universidad: {
         type: DataTypes.STRING(255), // No enum porque Sequelize no soporta check constraint
         allowNull: false,
-        validate: {
+        /* validate: {
             isIn: [['FP-UNE', 'FAFI-UNE', 'FCE-UNE', 'FDCS-UNE', 'Otro']], // Validación de valores permitidos
-        }
+        } */
     },
     carrera: {
         type: DataTypes.STRING(255), // No enum por la misma razón
         allowNull: false,
-        validate: {
+       /* validate: {
             isIn: [['Lic. en Análisis de Sistemas', 'Lic. en Turismo', 'Ingeniería de Sistemas', 'Ingeniería Eléctrica', 'Otro']],
-        }
+        } */
     },
     datos_personales: {
         type: DataTypes.TEXT, // Texto largo

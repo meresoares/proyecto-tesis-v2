@@ -8,7 +8,7 @@ class PersonService {
     return await Person.findAll();
   }
 
-  async getPersonById(id: number) {
+  async getPersonById(id: string) {
     return await Person.findByPk(id);
   }
 

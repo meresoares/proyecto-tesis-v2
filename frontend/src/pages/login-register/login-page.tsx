@@ -1,12 +1,13 @@
 // export default Login;
 // login-page.tsx
 
-import React from 'react';
+import React, { useEffect }from 'react';
+import { useNavigate } from 'react-router-dom';
 import loginImage from '../../images/img-login.webp';
-import '../../styles/login.css'
-import LoginFormulario from '../../components/formularios/login-formulario';
+import '../../styles/estilo.css'
+import Login from '../../components/login-component';
 
-const Login: React.FC = () => {
+const LoginPage: React.FC = () => {
 
   return (
     <section className="login-container vh-100">
@@ -20,7 +21,7 @@ const Login: React.FC = () => {
                 </div>
                 <div className="col-md-6 col-lg-7 d-flex align-items-center">
                   <div className="card-body p-4 p-lg-5 text-black">
-                    <LoginFormulario />
+                    <Login />
                   </div>
                 </div>
               </div>
@@ -32,4 +33,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default LoginPage;

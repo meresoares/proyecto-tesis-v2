@@ -1,13 +1,11 @@
-// export default LoginFormulario;
-// loginFormulario.tsx
+// export default Login;
+// login-component.tsx
 
 import React, { useState } from 'react';
-import { useAuth } from '../../services/auth-service';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../services/auth-service';
+import { Link, useNavigate } from 'react-router-dom';
 
-
-const LoginFormulario: React.FC = () => {
+const Login: React.FC = () => {
     // Obtiene la función de inicio de sesión del servicio de autenticación
     const { login } = useAuth() as { login: (email: string, password: string) => Promise<void> };
 
@@ -15,7 +13,9 @@ const LoginFormulario: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string>('');
+    const API_BASE_URL = 'http://localhost:3001/api';
 
     // Obtiene el objeto de historial de navegación
     const navigate = useNavigate();
@@ -28,11 +28,15 @@ const LoginFormulario: React.FC = () => {
     // Función para manejar el inicio de sesión
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         // Evita que el formulario se envíe automáticamente
-
         e.preventDefault();
+
         try {
             // Reinicia el mensaje de error
             setError('');
+
+            await login(email, password);
+            navigate('/user-page');
+
             // Validación del correo electrónico y contraseña
             if (!isEmailValid(email)) {
                 throw new Error('Por favor, introduce una dirección de correo electrónico válida.');
@@ -43,28 +47,22 @@ const LoginFormulario: React.FC = () => {
             // Intenta iniciar sesión con el correo electrónico y la contraseña proporcionados
             await login(email, password);
             // Redirige al usuario a la página de inicio después de iniciar sesión correctamente
-            navigate('/usuario-page');
-
         } catch (error) {
             if (error instanceof Error) {
                 setError(error.message);
             } else {
                 setError('Un error desconocido ocurrió.');
             }
+        } finally {
+            setIsLoading(false);
         }
     };
 
-    // Función para validar si una cadena de texto cumple con el formato de un correo electrónico válido.
-    const isEmailValid = (email: string) => {
-        // Verifica si la cadena contiene un formato de correo electrónico válido.
-        // El formato debe tener al menos un carácter antes y después del símbolo '@', seguido de un punto y al menos un carácter más después del punto.
-        return /\S+@\S+\.\S+/.test(email);
-    };
-
+    //Valida si una cadena de texto cumple con el formato de un correo electrónico válido.
+    // El formato debe tener al menos un carácter antes y después del símbolo '@', seguido de un punto y al menos un carácter más después del punto.
+    const isEmailValid = (email: string) => /\S+@\S+\.\S+/.test(email);
     // Valida que la contraseña tenga al menos 6 caracteres
-    const isPasswordValid = (password: string) => {
-        return password.length >= 6;
-    };
+    const isPasswordValid = (password: string) => password.length >= 6;
 
     return (
         <form onSubmit={handleLogin} style={{ maxWidth: '400px', margin: 'auto' }}>
@@ -84,14 +82,16 @@ const LoginFormulario: React.FC = () => {
                 </span>
             </div>
             <div className="pt-1 mb-4 d-flex justify-content-center">
-                <button className="btn btn-dark btn-lg btn-block" type="submit">Acceder</button>
+                <button className="btn btn-dark btn-lg btn-block" type="submit" disabled={isLoading}>
+                    {isLoading ? 'Accediendo...' : 'Acceder'}
+                </button>
             </div>
 
-            <p className="mb-4 d-flex justify-content-center" style={{ color: '#666' }}>¿No tienes una cuenta? <Link to="/registro" style={{ color: '#508bfc' }}>Regístrate aquí</Link></p>
-            <p className="mb-4 d-flex justify-content-center" style={{ color: '#666' }}>¿Eres administrador? <Link to="/login-admin" style={{ color: '#508bfc' }}>Ingresa aquí</Link></p>
+            <p className="mb-4 d-flex justify-content-center" style={{ color: '#666' }}>¿No tienes una cuenta?  <Link to="/register-page" style={{ color: '#508bfc' }}> Regístrate aquí</Link></p>
+            <p className="mb-4 d-flex justify-content-center" style={{ color: '#666' }}>¿Eres administrador?  <Link to="/login-admin" style={{ color: '#508bfc' }}> Ingresa aquí</Link></p>
         </form>
     );
 
 };
 
-export default LoginFormulario;
+export default Login;

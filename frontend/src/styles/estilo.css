@@ -1,0 +1,118 @@
+
+:root {
+  
+--color-1: #f3e9c3;
+--color-2: #e5b531;
+--color-3: #4a9dd4;
+--color-4: #269aa3;
+--color-5: #3eb0be;
+--color-6: #4359a0;
+--color-7: #182454;
+--color-8: #243a69; 
+}
+
+.login-container {
+  background-color: var(--color-1); 
+}
+
+.navbar-custom { 
+    background-color: var(--color-4); 
+  }
+  
+.color-principal {
+  background-color: var(--color-1); 
+}
+
+.color-secundario {
+  background-color: (var(--color-8));
+}
+
+body {
+  margin: 0;
+}
+
+/* Estilos para dispositivos móviles */
+@media (max-width: 767px) {
+  .card-body-mobile {
+    padding: 1rem;
+  }
+}
+
+/* Estilos para tabletas */
+@media (min-width: 768px) and (max-width: 991px) {
+  .card-body-tablet {
+    padding: 2rem;
+  }
+}
+
+/* Estilos para escritorios */
+@media (min-width: 992px) {
+  .card-body-desktop {
+    padding: 3rem;
+  }
+}
+
+
+/* Estilos para la tabla */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 1em;
+  font-family: 'Arial', sans-serif;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.table th {
+  background-color: #009879;
+  color: #ffffff;
+  text-align: left;
+  padding: 12px 15px;
+}
+
+.table td {
+  padding: 12px 15px;
+}
+
+.table tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.table tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.table tr:last-of-type {
+  border-bottom: 2px solid #009879;
+}
+
+/* Estilos para el botón */
+.button {
+  background-color: #009879;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 20px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.button:hover {
+  background-color: #007f66;
+}
+
+
+html {
+  overflow-x: hidden;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+

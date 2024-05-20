@@ -4,9 +4,9 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../services/auth-service';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../../components/nav-bar';
+import Navbar from '../../components/navbar-component';
 import { Login } from '@mui/icons-material';
-import UsuarioPage from './usuario-page';
+import UsuarioPage from './user-page';
 
 const Home: React.FC = () => {
     const authService = useAuth();

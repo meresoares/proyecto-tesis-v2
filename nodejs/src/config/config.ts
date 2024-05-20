@@ -2,6 +2,7 @@
 
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
+const { Pool } = require('pg');
 
 // Carga las variables de entorno desde el archivo .env
 dotenv.config();
