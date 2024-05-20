@@ -1,7 +1,7 @@
 // export default UsuarioPage;
 // user-page.tsx
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../services/auth-service';
 import Layout from '../../components/layout-component'
@@ -22,6 +22,33 @@ const UserPage: React.FC = () => {
   const [carrera, setCarrera] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+        try {
+            const userResponse = await axios.get(`${API_BASE_URL}/persons/${user?.uid}`);
+            if (userResponse.status === 200) {
+                // Si la solicitud es exitosa y se recibe una respuesta válida, verifica si el usuario ha completado el formulario
+                //const userData = userResponse.data;
+                navigate('/test-page')
+                /* const resultResponse = await axios.get(`${API_BASE_URL}/respuestas/${user?.uid}`);
+                if (resultResponse.status === 200) {
+                    // Si el usuario ha completado el formulario, redirige a la página de prueba
+                    navigate('/result-page');
+                } */
+            }
+        } catch (error) {
+            console.error('Error al obtener los detalles del usuario:', error);
+            // Maneja el error de acuerdo a tus necesidades, como mostrar un mensaje de error al usuario
+        }
+    };
+
+    // Verificar si el usuario ha completado el formulario de usuario al cargar la página
+    if (user) {
+        fetchUserDetails();
+    }
+}, [user, navigate]);
+  
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();

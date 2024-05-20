@@ -5,6 +5,7 @@ import Registro from './pages/login-register/register-page';
 import Home from './pages/user/home-page'
 import UsuarioPage from './pages/user/user-page';
 import TestPage from './pages/user/test-page';
+import ResultadoPage from './pages/user/result-page'
 import { AuthProvider } from './services/auth-service'; // Importa el proveedor de contexto de autenticación
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -21,6 +22,7 @@ function App() {
             <Route path="/home" element={<Home />} />
             <Route path="/user-page" element={< UsuarioPage/>} />
             <Route path="/test-page" element={< TestPage/>} />
+            <Route path="/result-page" element={< ResultadoPage/>} />
           </Routes>
 
         </div>

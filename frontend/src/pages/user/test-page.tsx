@@ -22,7 +22,42 @@ const TestPage: React.FC = () => {
   const [respuestas, setRespuestas] = useState<{ [key: number]: string }>({});
   const [loading, setLoading] = useState<boolean>(false);
 
+  useEffect(() => {
+    const fetchPreguntas = async () => {
+      setLoading(true);
+      try {
+        // Obtener preguntas desde la API
+        const response = await axios.get(`${API_BASE_URL}/preguntas`);
+        setPreguntas(response.data);
+      } catch (error) {
+        console.error('Error al obtener las preguntas:', error);
+        // Manejar el error
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    const fetchUserDetails = async () => {
+      try {
+        const resultResponse = await axios.get(`${API_BASE_URL}/respuestas/${user?.uid}`);
+        if (resultResponse.status === 200) {
+          navigate('/result-page');
+        } else {
+          navigate('/test-page');
+        }
+      } catch (error) {
+        console.error('Error al obtener los detalles del usuario:', error);
+      }
+    }
+
+    // Verificar si el usuario ha completado el formulario de usuario al cargar la página
+    if (user) {
+      fetchUserDetails();
+    }
+
+    fetchPreguntas();
+  }, [user, navigate]);
+  
   // Función para manejar el cambio de respuesta
   const handleChangeRespuesta = (preguntaId: number, respuesta: string) => {
     setRespuestas(prevRespuestas => ({
