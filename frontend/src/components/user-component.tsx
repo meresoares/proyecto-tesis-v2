@@ -47,9 +47,9 @@ const FechaNacimientoPicker: React.FC<{ startDate: Date | null; onChange: (date:
                     onChange={onChange}
                     showYearDropdown
                     scrollableYearDropdown
-                    yearDropdownItemNumber={18}
+                    yearDropdownItemNumber={20}
                     dateFormat="dd/MM/yyyy"
-                    maxDate={new Date("2006-12-31")}
+                    maxDate={new Date("2004-12-31")}
                     minDate={new Date("1989-01-01")}
                     className="form-control"
                     ref={datePickerRef}

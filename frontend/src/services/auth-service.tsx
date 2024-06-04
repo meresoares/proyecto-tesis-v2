@@ -1,8 +1,8 @@
 // export default AuthService;
 // auth-service.tsx
 
-import { createContext, ReactNode, useContext, useState } from "react";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut, User } from "firebase/auth";
+import { createContext, ReactNode, useContext, useState, useEffect } from "react";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut, User, onAuthStateChanged } from "firebase/auth";
 
 // Definir el tipo de contexto para AuthService
 interface AuthService {
@@ -31,6 +31,17 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
     const auth = getAuth();
 
     const [user, setUser] = useState<User | null>(null);
+
+    useEffect(() => {
+        // Escuchar los cambios en el estado de autenticación del usuario
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
+        });
+
+        // Limpiar el listener al desmontar el componente
+        return () => unsubscribe();
+    }, [auth]);
+
 
     // Función para registrar un nuevo usuario
     const register = async (email: string, password: string): Promise<void> => {

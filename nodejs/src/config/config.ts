@@ -13,7 +13,7 @@ dotenv.config();
  * En caso de no estar definidas, se utilizan valores predeterminados.
  */
 const sequelize = new Sequelize(
-  process.env.DB_NAME || 'Persona',
+  process.env.DB_NAME || 'anxiesense',
   process.env.DB_USER || '',
   process.env.DB_PASS || '', {
   host: process.env.DB_HOST || 'localhost',

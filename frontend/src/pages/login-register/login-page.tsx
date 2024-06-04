@@ -1,8 +1,6 @@
 // export default Login;
 // login-page.tsx
 
-import React, { useEffect }from 'react';
-import { useNavigate } from 'react-router-dom';
 import loginImage from '../../images/img-login.webp';
 import '../../styles/estilo.css'
 import Login from '../../components/login-component';
@@ -11,7 +9,7 @@ const LoginPage: React.FC = () => {
 
   return (
     <section className="login-container vh-100">
-      <div className="container py-5 h-100">
+      <div className="container py-4 h-100">
         <div className="row d-flex justify-content-center align-items-center h-100">
           <div className="col col-xl-10">
             <div className="card" style={{ borderRadius: '1rem' }}>

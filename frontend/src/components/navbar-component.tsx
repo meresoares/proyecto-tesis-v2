@@ -14,7 +14,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, handleLogout }) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark navbar-custom" >
       <div className="container-fluid">
-        <a className="navbar-brand text-white mx-auto" href="/home">ANSIEDAD - SISTEMA EXPERTO</a>
+        <a className="navbar-brand text-white mx-auto" href="/home">AnxieSense - Sistema Experto</a>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>

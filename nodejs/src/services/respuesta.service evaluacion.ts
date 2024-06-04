@@ -2,14 +2,14 @@ import Respuesta from '../models/respuesta.models';
 import { ValidationError } from 'sequelize';
 
 // Definición de tipos para las respuestas
-type RespuestaValue = 'Nunca' | 'Muy poco' | 'Un poco' | 'Mucho' | 'Demasiado';
+type RespuestaValue = 'Nada' | 'Muy poco' | 'Un poco' | 'Mucho' | 'Demasiado';
 type Respuestas = Array<{ pregunta_id: number; respuesta: RespuestaValue }>;
 type ValoresRespuestas = Record<RespuestaValue, number>;
 
 class SistemaExperto {
   // Asigna valores numéricos a cada respuesta
   private valores: ValoresRespuestas = {
-    'Nunca': 0,
+    'Nada': 0,
     'Muy poco': 1,
     'Un poco': 2,
     'Mucho': 3,

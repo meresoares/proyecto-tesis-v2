@@ -14,7 +14,7 @@ interface QuestionProps {
 }
 
 const opciones = [
-  { label: "Nunca", value: 0 },
+  { label: "Nada", value: 0 },
   { label: "Muy poco", value: 1 },
   { label: "Un poco", value: 2 },
   { label: "Mucho", value: 3 },

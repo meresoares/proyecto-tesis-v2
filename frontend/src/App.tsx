@@ -6,10 +6,13 @@ import Home from './pages/user/home-page'
 import UsuarioPage from './pages/user/user-page';
 import TestPage from './pages/user/test-page';
 import ResultadoPage from './pages/user/result-page'
-import { AuthProvider } from './services/auth-service'; // Importa el proveedor de contexto de autenticación
+import { AuthProvider, useAuth } from './services/auth-service'; // Importa el proveedor de contexto de autenticación
 import '@fortawesome/fontawesome-free/css/all.css';
 
+
 function App() {
+
+  
   return (
     <AuthProvider> {
       /* Envuelve la aplicación con el proveedor de contexto de autenticación */

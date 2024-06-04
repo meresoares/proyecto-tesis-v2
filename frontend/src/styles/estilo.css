@@ -1,13 +1,13 @@
 
 :root {
   
---color-1: #f3e9c3;
---color-2: #e5b531;
---color-3: #4a9dd4;
---color-4: #269aa3;
---color-5: #3eb0be;
---color-6: #4359a0;
---color-7: #182454;
+--color-1: #f6f1d5;
+--color-2: #eeba3a;
+--color-3: #db623a;
+--color-4: #4a9dd4;
+--color-5: #547291;
+--color-6: #3eb0be;
+--color-7: #4359a0;
 --color-8: #243a69; 
 }
 
@@ -15,20 +15,28 @@
   background-color: var(--color-1); 
 }
 
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .navbar-custom { 
-    background-color: var(--color-4); 
-  }
+  background-color: var(--color-2); 
+}
   
 .color-principal {
   background-color: var(--color-1); 
 }
 
-.color-secundario {
-  background-color: (var(--color-8));
-}
-
-body {
-  margin: 0;
+.btn-boton {
+  color: var(--color-4);
 }
 
 /* Estilos para dispositivos móviles */
@@ -52,67 +60,89 @@ body {
   }
 }
 
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
 
-/* Estilos para la tabla */
-.table {
+.container {
+  overflow-y: hidden;
+}
+
+body {
+  overflow-y: hidden;
+}
+
+.vh-100 {
+  min-height: 100vh;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.btn-dark:hover {
+  background-color: #182454; /* Cambia este color según tu preferencia */
+}
+
+table {
   width: 100%;
   border-collapse: collapse;
   margin: 20px 0;
-  font-size: 1em;
-  font-family: 'Arial', sans-serif;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-}
-
-.table th {
-  background-color: #009879;
-  color: #ffffff;
+  font-size: 15px;
   text-align: left;
+}
+
+thead tr {
+  background-color: var(--color-3); 
+  color: #ffffff;
+}
+
+thead th, tbody td {
   padding: 12px 15px;
 }
 
-.table td {
-  padding: 12px 15px;
+tbody tr:nth-of-type(even) {
+  background-color: var(--color-1); 
 }
 
-.table tr {
-  border-bottom: 1px solid #dddddd;
+tbody tr:hover {
+  background-color: var(--color-1)
 }
 
-.table tr:nth-of-type(even) {
-  background-color: #f3f3f3;
+.text-center {
+  text-align: center;
 }
 
-.table tr:last-of-type {
-  border-bottom: 2px solid #009879;
-}
-
-/* Estilos para el botón */
-.button {
-  background-color: #009879;
-  color: white;
+.btn-primary {
+  background-color: #4359a0; /* Cambia este color según tu preferencia */
+  color: #ffffff;
   border: none;
   padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 20px 2px;
+  font-size: 18px;
   cursor: pointer;
-  border-radius: 4px;
+  transition: background-color 0.3s ease;
 }
 
-.button:hover {
-  background-color: #007f66;
-}
-
-
-html {
-  overflow-x: hidden;
+.btn-primary:hover {
+  background-color: #182454; /* Cambia este color según tu preferencia */
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Para navegadores Webkit (Chrome, Safari, etc.) */
+body::-webkit-scrollbar {
+  display: none; /* Oculta las barras de desplazamiento */
+}
+
+body {
+  -ms-overflow-style: none;  /* IE y Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
 
 

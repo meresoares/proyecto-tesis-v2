@@ -15,14 +15,34 @@ interface Pregunta {
 
 const TestPage: React.FC = () => {
   const { user, logout } = useAuth();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const API_BASE_URL = 'http://localhost:3001/api';
   const [preguntas, setPreguntas] = useState<Pregunta[]>([]);
   // Estado para almacenar las respuestas del cuestionario
   const [respuestas, setRespuestas] = useState<{ [key: number]: string }>({});
   const [loading, setLoading] = useState<boolean>(false);
+  const [validated, setValidated] = useState(false);
 
   useEffect(() => {
+
+    const checkTestCompletion = async () => {
+      try {
+        const resultResponse = await axios.get(`${API_BASE_URL}/respuestas/${user?.uid}`);
+        if (resultResponse.status === 200) {
+          // El usuario ya completó el test, redirige a result-page
+         // navigate('/result-page');
+        }
+      } catch (error) {
+        console.error('Error al verificar si el usuario ha completado el test:', error);
+      } finally {
+        setValidated(true);
+      }
+    };
+
+    if (!validated && user) {
+      checkTestCompletion();
+    }
+
     const fetchPreguntas = async () => {
       setLoading(true);
       try {
@@ -37,27 +57,9 @@ const TestPage: React.FC = () => {
       }
     };
 
-    const fetchUserDetails = async () => {
-      try {
-        const resultResponse = await axios.get(`${API_BASE_URL}/respuestas/${user?.uid}`);
-        if (resultResponse.status === 200) {
-          navigate('/result-page');
-        } else {
-          navigate('/test-page');
-        }
-      } catch (error) {
-        console.error('Error al obtener los detalles del usuario:', error);
-      }
-    }
-
-    // Verificar si el usuario ha completado el formulario de usuario al cargar la página
-    if (user) {
-      fetchUserDetails();
-    }
-
     fetchPreguntas();
-  }, [user, navigate]);
-  
+  }, [user, navigate, validated]);
+
   // Función para manejar el cambio de respuesta
   const handleChangeRespuesta = (preguntaId: number, respuesta: string) => {
     setRespuestas(prevRespuestas => ({
@@ -81,11 +83,11 @@ const TestPage: React.FC = () => {
       };
       // Envía las respuestas al backend para su evaluación
       const response = await axios.post(`${API_BASE_URL}/respuestas`, data);
-      
+
       const resultadoEvaluacion = response.data.resultado;
-      
+
       // Redirige a la página de resultados después de enviar las respuestas
-      navigate('/result-page', { state: {resultado: resultadoEvaluacion}});
+      navigate('/result-page', { state: { resultado: resultadoEvaluacion } });
       console.log('Respuesta enviada:', response.data);
       // Realiza cualquier acción adicional después de enviar las respuestas, como mostrar un mensaje de éxito o redirigir a otra página
     } catch (error) {
@@ -98,19 +100,18 @@ const TestPage: React.FC = () => {
   };
 
   return (
-    <Layout user={user} handleLogout={logout} title='Cuestionario de Ansiedad Social para Adultos (CASO A-30)'
-      subtitle='A continuación se presenta una serie de situaciones sociales que le pueden producir malestar, tensión o nerviosismo. Por favor seleccione la opción que mejor refleje según la escala que se presenta más abajo'>
-      <p>En el caso que no haber vivido algunas de las situaciones, imagínese cuál sería el grado de malestar, tensión o nerviosismo que le ocasionaría y seleccione el numero correspondiente. </p>
-      <p>Por favor hágalo de manera sincera, no se preocupe porque no existen respuestas correctas o incorrectas. </p>
+    <Layout user={user} handleLogout={logout} title='Inventario de Fobia Social (Social Phobia Inventory, SPIN)'
+      subtitle='Por favor, indique en qué medida le han molestado los siguientes problemas durante las últimas semanas.'>
+      <p>Responda con sinceridad y tómese el tiempo que necesite; no se preocupe, ya que no hay respuestas correctas o incorrectas. Su honestidad nos ayudará a proporcionarle la mejor evaluación posible.</p>
       <div>
         <form onSubmit={handleSubmit}>
           <Questions preguntas={preguntas} onChangeRespuesta={handleChangeRespuesta} />
 
           <div className="text-center">
-            <button className="btn btn-dark btn-lg" type="submit" disabled={loading}>
+            <button className="btn btn-primary btn-lg" type="submit" disabled={loading}>
               {loading ? 'Guardando...' : 'Guardar y Evaluar'}
             </button>
-          </div>        
+          </div>
         </form>
       </div>
     </Layout>

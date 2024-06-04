@@ -22,33 +22,28 @@ const UserPage: React.FC = () => {
   const [carrera, setCarrera] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
+  const [validated, setValidated] = useState(false);
 
   useEffect(() => {
     const fetchUserDetails = async () => {
         try {
             const userResponse = await axios.get(`${API_BASE_URL}/persons/${user?.uid}`);
             if (userResponse.status === 200) {
-                // Si la solicitud es exitosa y se recibe una respuesta válida, verifica si el usuario ha completado el formulario
-                //const userData = userResponse.data;
-                navigate('/test-page')
-                /* const resultResponse = await axios.get(`${API_BASE_URL}/respuestas/${user?.uid}`);
-                if (resultResponse.status === 200) {
-                    // Si el usuario ha completado el formulario, redirige a la página de prueba
-                    navigate('/result-page');
-                } */
+                // El usuario ya completó el formulario, redirige a test-page
+                navigate('/test-page');
             }
         } catch (error) {
             console.error('Error al obtener los detalles del usuario:', error);
-            // Maneja el error de acuerdo a tus necesidades, como mostrar un mensaje de error al usuario
+        } finally {
+          setValidated(true);
         }
     };
 
-    // Verificar si el usuario ha completado el formulario de usuario al cargar la página
-    if (user) {
+    if (!validated && user) {
         fetchUserDetails();
     }
-}, [user, navigate]);
-  
+}, [user, navigate, validated]);
+
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
@@ -72,9 +67,9 @@ const UserPage: React.FC = () => {
     if (startDate) {
       // Calcula la edad del usuario
       const age = differenceInYears(today, startDate);
-      if (age < 18 || age > 35) {
+      if (age < 20 || age > 35) {
         // Establece un error si la edad está fuera del rango permitido
-        setError('Debes tener entre 18 y 35 años para registrarte.');
+        setError('Debes tener entre 20 y 35 años para registrarte.');
         return;
       }
     }
@@ -99,7 +94,7 @@ const UserPage: React.FC = () => {
       });
 
       navigate('/test-page');
-      
+
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setError(`Error al enviar los datos: ${error.response?.status} ${error.response?.data?.message}`);
@@ -114,10 +109,10 @@ const UserPage: React.FC = () => {
   };
 
   return (
-    <Layout user={user} handleLogout={logout} title='Bienvenido a xx'
-      subtitle='Utilizamos el Cuestionario de Ansiedad Social para Adultos (CASO-A30) para ayudarte a comprender mejor tus niveles de ansiedad en situaciones sociales. Antes de comenzar, por favor proporciona algunos datos personales que serán tratados con absoluta confidencialidad, al igual que los resultados finales de la evaluación.'>
+    <Layout user={user} handleLogout={logout} title='Bienvenido a AnxieSense'
+      subtitle='AnxieSense es un sistema experto diseñado para ayudarte a comprender mejor tus niveles de ansiedad social. Antes de comenzar, por favor completa el siguiente formulario con tus datos personales. Te garantizamos que toda la información proporcionada será tratada con absoluta confidencialidad, al igual que los resultados de tu evaluación.'>
       <form onSubmit={handleSubmit} style={{ maxWidth: '500px', margin: 'auto' }}>
-        <h4 className="text-center mb-4">Formulario del usuario</h4>
+        <h4 className="text-md-center mb-3">Formulario de Información Personal</h4>
 
         {error && <div className="alert alert-danger mb-3">{error}</div>}
 
@@ -128,7 +123,7 @@ const UserPage: React.FC = () => {
         <UniversidadCarreraSelect universidad={universidad} carrera={carrera} onChangeUniversidad={setUniversidad} onChangeCarrera={setCarrera} />
 
         <div className="text-center">
-          <button className="btn btn-dark btn-lg" type="submit" disabled={loading}>
+          <button className="btn btn-primary btn-lg" type="submit" disabled={loading}>
             {loading ? 'Cargando...' : 'Empezar test'}
           </button>
         </div>

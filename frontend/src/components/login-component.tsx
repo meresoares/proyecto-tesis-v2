@@ -67,7 +67,7 @@ const Login: React.FC = () => {
     return (
         <form onSubmit={handleLogin} style={{ maxWidth: '400px', margin: 'auto' }}>
             <div className="text-center mb-4">
-                <h1 className="h3 mb-3 font-weight-normal">¡Bienvenido a Ansiedad!</h1>
+                <h1 className="h3 mb-3 font-weight-normal">¡Bienvenido a AnxieSense!</h1>
                 <h5 className="fw-normal mb-3 pb-3" style={{ letterSpacing: '1px', color: '#666' }}>Iniciar sesión</h5>
             </div>
             {error && <div className="alert alert-danger mb-3">{error}</div>}
@@ -82,7 +82,7 @@ const Login: React.FC = () => {
                 </span>
             </div>
             <div className="pt-1 mb-4 d-flex justify-content-center">
-                <button className="btn btn-dark btn-lg btn-block" type="submit" disabled={isLoading}>
+                <button className="btn btn-primary btn-boton btn-lg btn-block" type="submit" disabled={isLoading}>
                     {isLoading ? 'Accediendo...' : 'Acceder'}
                 </button>
             </div>

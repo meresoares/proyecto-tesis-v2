@@ -10,12 +10,13 @@ import { useNavigate } from 'react-router-dom';
 
 const Register: React.FC = () => {
     const auth = useAuth();
-    const { register, loginWithGoogle } = useAuth();
+    const { register } = useAuth();
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [showRepeatPassword, setShowRepeatPassword] = useState(false);
     const [error, setError] = useState('');
     const [submitting, setSubmitting] = useState(false); // Estado para controlar el envío del formulario
     const [successMessage, setSuccessMessage] = useState('');
@@ -25,6 +26,11 @@ const Register: React.FC = () => {
     // Función para alternar la visibilidad de la contraseña
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
+    };
+
+    // Función para alternar la visibilidad de la repetición de contraseña
+    const toggleRepeatPasswordVisibility = () => {
+        setShowRepeatPassword(!showRepeatPassword);
     };
 
     // Función para manejar el envío del formulario de registro
@@ -54,7 +60,8 @@ const Register: React.FC = () => {
 
         try {
             await register(email, password);
-            navigate('/user-page');
+            setSuccessMessage('¡Cuenta creada exitosamente!');
+            navigate('/');
 
         } catch (error) {
             if (error instanceof Error) {
@@ -63,7 +70,7 @@ const Register: React.FC = () => {
         } finally {
             // Habilita el botón de registro nuevamente
             setSubmitting(false);
-        }
+        } 
     };
 
     // Función para manejar el inicio de sesión con Google
@@ -73,8 +80,9 @@ const Register: React.FC = () => {
 
         try {
             await auth.loginWithGoogle();
-            // Redirige al usuario al inicio de sesión después de un registro exitoso con Google                setSuccessMessage('¡Registrado exitosamente con Google!');
-            navigate('/user-page');
+            setSuccessMessage('¡Registrado exitosamente con Google!');
+            // Redirige al usuario al inicio de sesión después de un registro exitoso con Google                
+            navigate('/');
         } catch (error) {
             // Asegurarse de que el error sea tratado como un Error
             if (error instanceof Error) {
@@ -83,6 +91,7 @@ const Register: React.FC = () => {
                 setError('Ocurrió un error inesperado');
             }
         } finally {
+            // Habilita el botón de registro nuevamente
             setIsLoading(false);
         }
 
@@ -91,8 +100,9 @@ const Register: React.FC = () => {
 
     return (
         <form onSubmit={handleSubmit} style={{ maxWidth: '400px', margin: 'auto' }}>
-            <div className="text-center mb-4">
-                <h1 className="h3 mb-3 font-weight-normal">Nuevo registro</h1>
+            <div className="text-center mb-3">
+                <h1 className="h3 mb-3 font-weight-normal" style={{ marginTop: '1.5rem' }}>¡Bienvenido a AnxieSense!</h1>
+                <h5 className="fw-normal mb-3 pb-3" style={{ letterSpacing: '1px', color: '#666' }}>Crear una cuenta</h5>
             </div>
             {error && <div className="alert alert-danger mb-3">{error}</div>}
             <div className="form-outline mb-4">
@@ -111,11 +121,11 @@ const Register: React.FC = () => {
             <div className="input-group mb-3">
                 <input type={showPassword ? 'text' : 'password'} id="repeatPassword" className="form-control form-control-lg" placeholder='Repetir contraseña' value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} />
                 <label className="form-label" htmlFor="repeatPassword"></label>
-                <span className="input-group-text" style={{ cursor: 'pointer' }} onClick={togglePasswordVisibility}>
+                <span className="input-group-text" style={{ cursor: 'pointer' }} onClick={toggleRepeatPasswordVisibility}>
                     <i className="fas fa-eye" style={{ color: '#666' }}></i>
                 </span>
             </div>
-            <div className="pt-1 mb-3">
+            <div className="pt-1 mb-3 text-center">
                 <button className="btn btn-primary btn-lg btn-block" type="submit" disabled={submitting}>
                     {isLoading ? 'Registrando...' : 'Crear cuenta'}
                 </button>
@@ -125,11 +135,11 @@ const Register: React.FC = () => {
             <div className="text-center">
                 <p>O Regístrate con:</p>
                 <button type="button" className="btn btn-link btn-floating mx-4" onClick={handleGoogleLogin}>
-                    <i className="fab fa-google"></i>
+                    <i className="fab fa-google fa-2x"></i>
                 </button>
             </div>
 
-            <p className="mb-5 pb-lg-2" style={{ color: '#393f81' }}>¿Ya tienes una cuenta? <Link to="/" style={{ color: '#393f81' }}>Ingresa aquí</Link></p>
+            <p className="text-center" style={{ color: '#666' }}>¿Ya tienes una cuenta? <Link to="/" style={{ color: '#508bfc' }}>Ingresa aquí</Link></p>
         </form>
     );
 };

@@ -57,7 +57,7 @@ Person.init({
         }
     }
 }, {
-    tableName: 'persona', // Nombre de la tabla en la base de datos
+    tableName: 'personas', // Nombre de la tabla en la base de datos
     sequelize,
     timestamps: false, // Confirmado que no queremos timestamps
 });
