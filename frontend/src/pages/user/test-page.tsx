@@ -7,6 +7,7 @@ import Questions from '../../components/questions-component';
 import Layout from '../../components/layout-component';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/estilo.css';
+import '../../styles/test.css'
 
 interface Pregunta {
   id: number;
@@ -20,8 +21,11 @@ const TestPage: React.FC = () => {
   const [preguntas, setPreguntas] = useState<Pregunta[]>([]);
   // Estado para almacenar las respuestas del cuestionario
   const [respuestas, setRespuestas] = useState<{ [key: number]: string }>({});
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [validated, setValidated] = useState(false);
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+
 
   useEffect(() => {
 
@@ -30,7 +34,7 @@ const TestPage: React.FC = () => {
         const resultResponse = await axios.get(`${API_BASE_URL}/respuestas/${user?.uid}`);
         if (resultResponse.status === 200) {
           // El usuario ya completó el test, redirige a result-page
-         // navigate('/result-page');
+          // navigate('/result-page');
         }
       } catch (error) {
         console.error('Error al verificar si el usuario ha completado el test:', error);
@@ -66,12 +70,39 @@ const TestPage: React.FC = () => {
       ...prevRespuestas,
       [preguntaId]: respuesta,
     }));
+    setShowAlert(false);
+  };
+
+  const handleNextQuestion = () => {
+    if (respuestas[preguntas[currentQuestionIndex]?.id] === undefined) {
+      setShowAlert(true);
+      return;
+    }
+    setShowAlert(false); // Ocultar alerta cuando la pregunta ha sido respondida
+    if (currentQuestionIndex < preguntas.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+    }
+  };
+
+  const handlePrevQuestion = () => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(currentQuestionIndex - 1);
+    }
   };
 
   // Función para enviar las respuestas al backend
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    setLoading(true); // Activa el indicador de carga
+
+    // Verifica si todas las preguntas tienen una respuesta antes de enviar
+    const allQuestionsAnswered = preguntas.every(pregunta => respuestas[pregunta.id] !== undefined);
+
+    if (!allQuestionsAnswered) {
+      setShowAlert(true);
+      return;
+    }
+
+    setLoading(true);
     try {
       const personaId = user?.uid;
       const data = {
@@ -81,41 +112,89 @@ const TestPage: React.FC = () => {
           respuesta: respuestas[parseInt(preguntaId)],
         })),
       };
-      // Envía las respuestas al backend para su evaluación
       const response = await axios.post(`${API_BASE_URL}/respuestas`, data);
-
       const resultadoEvaluacion = response.data.resultado;
-
-      // Redirige a la página de resultados después de enviar las respuestas
       navigate('/result-page', { state: { resultado: resultadoEvaluacion } });
       console.log('Respuesta enviada:', response.data);
-      // Realiza cualquier acción adicional después de enviar las respuestas, como mostrar un mensaje de éxito o redirigir a otra página
     } catch (error) {
       console.error('Error al enviar las respuestas:', error);
-      // Maneja el error de acuerdo a tus necesidades, como mostrar un mensaje de error al usuario
     } finally {
-      // Desactiva el indicador de carga
       setLoading(false);
     }
   };
 
   return (
-    <Layout user={user} handleLogout={logout} title='Inventario de Fobia Social (Social Phobia Inventory, SPIN)'
-      subtitle='Por favor, indique en qué medida le han molestado los siguientes problemas durante las últimas semanas.'>
-      <p>Responda con sinceridad y tómese el tiempo que necesite; no se preocupe, ya que no hay respuestas correctas o incorrectas. Su honestidad nos ayudará a proporcionarle la mejor evaluación posible.</p>
-      <div>
-        <form onSubmit={handleSubmit}>
-          <Questions preguntas={preguntas} onChangeRespuesta={handleChangeRespuesta} />
-
+    <Layout
+      user={user}
+      handleLogout={logout}
+      title="Inventario de Fobia Social (Social Phobia Inventory, SPIN)"
+      subtitle="Por favor, indique en qué medida le han molestado los siguientes problemas durante las últimas semanas."
+    >
+      <p className="question-text">
+        Responda con sinceridad y tómese el tiempo que necesite; no se preocupe, ya que no hay respuestas correctas o incorrectas. Su honestidad nos ayudará a proporcionarle la mejor evaluación posible.
+      </p>
+      {showAlert && (
+        <div className="alert alert-warning" role="alert">
+          Por favor, responde la pregunta antes de continuar.
+        </div>
+      )}
+      <div className="progress-container">
+        <div
+          className="progress-bar"
+          style={{ width: `${((currentQuestionIndex + 1) / preguntas.length) * 100}%` }}
+        />
+        <span className="progress-text">{`${currentQuestionIndex + 1} / ${preguntas.length}`}</span>
+      </div>
+      <div className="content">
+        {loading ? (
           <div className="text-center">
-            <button className="btn btn-primary btn-lg" type="submit" disabled={loading}>
-              {loading ? 'Guardando...' : 'Guardar y Evaluar'}
-            </button>
+            <p>Cargando...</p>
           </div>
-        </form>
+        ) : (
+          <form onSubmit={handleSubmit}>
+            {preguntas.length > 0 && preguntas[currentQuestionIndex] && (
+              <Questions
+                pregunta={preguntas[currentQuestionIndex]}
+                onChangeRespuesta={handleChangeRespuesta}
+                respuestaActual={respuestas[preguntas[currentQuestionIndex]?.id]}
+              />
+            )}
+            {showAlert && (
+              <div className="alert alert-warning" role="alert">
+                Por favor, responde la pregunta antes de continuar.
+              </div>
+            )}
+            <div className="navigation-buttons text-center">
+              <button
+                className="btn btn-primary"
+                type="button"
+                onClick={handlePrevQuestion}
+                disabled={currentQuestionIndex === 0}
+              >
+                Anterior
+              </button>
+              {currentQuestionIndex < preguntas.length - 1 ? (
+                <button
+                  className="btn btn-primary"
+                  type="button"
+                  onClick={handleNextQuestion}
+                >
+                  Siguiente
+                </button>
+              ) : (
+                <button
+                  className="btn btn-primary"
+                  type="submit"
+                  disabled={loading}
+                >
+                  {loading ? 'Guardando...' : 'Guardar y Evaluar'}
+                </button>
+              )}
+            </div>
+          </form>
+        )}
       </div>
     </Layout>
-
   );
 };
 

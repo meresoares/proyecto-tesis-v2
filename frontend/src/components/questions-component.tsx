@@ -2,6 +2,7 @@
 
 import React from 'react';
 import '../styles/estilo.css';
+import '../styles/test.css'
 
 interface Pregunta {
   id: number;
@@ -9,8 +10,9 @@ interface Pregunta {
 }
 
 interface QuestionProps {
-  preguntas: Pregunta[];
+  pregunta: Pregunta;
   onChangeRespuesta: (preguntaId: number, respuesta: string) => void;
+  respuestaActual: string | undefined;
 }
 
 const opciones = [
@@ -21,39 +23,26 @@ const opciones = [
   { label: "Demasiado", value: 4 }
 ];
 
-const Questions: React.FC<QuestionProps> = ({ preguntas, onChangeRespuesta }) => {
-  const handleChange = (preguntaId: number, respuesta: string) => {
-    onChangeRespuesta(preguntaId, respuesta);
-  };;
+const Questions: React.FC<QuestionProps> = ({ pregunta, onChangeRespuesta, respuestaActual }) => {
+  const handleChange = (respuesta: string) => {
+    onChangeRespuesta(pregunta.id, respuesta);
+  };
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>ítems</th>
-          {opciones.map((opcion, index) => (
-            <th key={index}>{opcion.label}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {preguntas.map((pregunta) => (
-          <tr key={pregunta.id}>
-            <td>{pregunta.descripcion}</td>
-            {opciones.map((opcion) => (
-              <td key={opcion.label}>
-                <input
-                  type="radio"
-                  name={`pregunta_${pregunta.id}`}
-                  value={opcion.label}
-                  onChange={(e) => handleChange(pregunta.id, e.target.value.toString())}
-                />
-              </td>
-            ))}
-          </tr>
+    <div className="question-container">
+      <h5 className="text-center">{pregunta.descripcion}</h5>
+      <div className="options">
+        {opciones.map((opcion) => (
+          <button
+            key={opcion.value}
+            className={`option-button ${respuestaActual === opcion.value.toString() ? 'selected' : ''}`}
+            onClick={() => handleChange(opcion.value.toString())}
+          >
+            {opcion.label}
+          </button>
         ))}
-      </tbody>
-    </table>
+      </div>
+    </div>
   );
 };
 

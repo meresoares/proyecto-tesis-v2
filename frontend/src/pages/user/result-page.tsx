@@ -46,6 +46,8 @@ const ResultPage: React.FC = () => {
     return null; // O puedes retornar un mensaje de carga, por ejemplo, <p>Loading...</p>
   }  
 
+  
+
   const { resultado } = location.state;
   return (
     <Layout user={user} handleLogout={logout} title='¡Gracias por completar la evaluación!'

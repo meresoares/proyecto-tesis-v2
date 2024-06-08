@@ -24,7 +24,7 @@ const Layout: React.FC<LayoutProps> = ({ user, handleLogout, title, subtitle, ch
     return (
         <div className="layout-container">
             <Navbar user={user} handleLogout={handleLogoutAndRedirect} />
-            <div className="color-principal">
+            <div className="color-principal" >
                 <div className="row justify-content-center align-items-center">
                     <div className="col-lg-9">
                         <div className="card" style={{ maxWidth: '100%', overflow: 'hidden' }}>

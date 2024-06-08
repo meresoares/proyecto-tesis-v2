@@ -15,10 +15,23 @@
   background-color: var(--color-1); 
 }
 
+.layout-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex: 1;
+  overflow: hidden; /* Ajuste para prevenir desbordamiento */
+  overflow-y: auto; /* Permitir el desplazamiento solo en el contenido */
+}
+
 .card {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin: 20px auto; /* Centrar el card */
 }
 
 .card-body {
@@ -60,19 +73,6 @@
   }
 }
 
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-.container {
-  overflow-y: hidden;
-}
-
-body {
-  overflow-y: hidden;
-}
 
 .vh-100 {
   min-height: 100vh;
@@ -84,35 +84,6 @@ body {
 
 .btn-dark:hover {
   background-color: #182454; /* Cambia este color según tu preferencia */
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 20px 0;
-  font-size: 15px;
-  text-align: left;
-}
-
-thead tr {
-  background-color: var(--color-3); 
-  color: #ffffff;
-}
-
-thead th, tbody td {
-  padding: 12px 15px;
-}
-
-tbody tr:nth-of-type(even) {
-  background-color: var(--color-1); 
-}
-
-tbody tr:hover {
-  background-color: var(--color-1)
-}
-
-.text-center {
-  text-align: center;
 }
 
 .btn-primary {
@@ -134,7 +105,7 @@ code {
     monospace;
 }
 
-/* Para navegadores Webkit (Chrome, Safari, etc.) */
+
 body::-webkit-scrollbar {
   display: none; /* Oculta las barras de desplazamiento */
 }
@@ -143,6 +114,3 @@ body {
   -ms-overflow-style: none;  /* IE y Edge */
   scrollbar-width: none;  /* Firefox */
 }
-
-
-
