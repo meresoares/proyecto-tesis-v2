@@ -5,17 +5,21 @@ import React, { useState } from 'react';
 import { useAuth } from '../services/auth-service';
 import { Link, useNavigate } from 'react-router-dom';
 
-const Login: React.FC = () => {
+
+interface LoginProps {
+    isAdmin?: boolean; // Propiedad para indicar si es login de administrador
+}
+
+const Login: React.FC<LoginProps> = ({isAdmin = false}) => {
     // Obtiene la función de inicio de sesión del servicio de autenticación
     const { login } = useAuth() as { login: (email: string, password: string) => Promise<void> };
 
     // Estados locales para el correo electrónico, contraseña, visibilidad de la contraseña y mensajes de error
-    const [email, setEmail] = useState('');
+    const [email, setEmail] = useState(isAdmin ? 'admin@gmail.com' : '');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string>('');
-    const API_BASE_URL = 'http://localhost:3001/api';
 
     // Obtiene el objeto de historial de navegación
     const navigate = useNavigate();
@@ -72,7 +76,14 @@ const Login: React.FC = () => {
             </div>
             {error && <div className="alert alert-danger mb-3">{error}</div>}
             <div className="form-outline mb-4">
-                <input type="email" id="email" className="form-control form-control-lg" placeholder='Correo electrónico' value={email} onChange={(e) => setEmail(e.target.value)} />
+                <input 
+                type="email" 
+                id="email" 
+                className="form-control form-control-lg" 
+                placeholder='Correo electrónico' 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={isAdmin} />
             </div>
             <div className="input-group mb-3">
                 <input type={showPassword ? 'text' : 'password'} id="password" className="form-control form-control-lg" placeholder='Contraseña' value={password} onChange={(e) => setPassword(e.target.value)} />
@@ -87,8 +98,21 @@ const Login: React.FC = () => {
                 </button>
             </div>
 
-            <p className="mb-4 d-flex justify-content-center" style={{ color: '#666' }}>¿No tienes una cuenta?  <Link to="/register-page" style={{ color: '#508bfc' }}> Regístrate aquí</Link></p>
-            <p className="mb-4 d-flex justify-content-center" style={{ color: '#666' }}>¿Eres administrador?  <Link to="/login-admin" style={{ color: '#508bfc' }}> Ingresa aquí</Link></p>
+            <p className="mb-4 d-flex justify-content-center" style={{ color: '#666' }}>
+                { !isAdmin ? (
+                    <>
+                        ¿Eres administrador? <Link to="/login-admin" style={{ color: '#508bfc' }}>Ingresa aquí</Link>
+                    </>
+                ) : (
+                    <>
+                        ¿No eres administrador? <Link to="/" style={{ color: '#508bfc' }}>Ingresa aquí</Link>
+                    </>
+                )}
+              </p>
+
+              {!isAdmin && (
+                <p className="mb-4 d-flex justify-content-center" style={{ color: '#666' }}>¿No tienes una cuenta? <Link to="/register-page" style={{ color: '#508bfc' }}>Regístrate aquí</Link></p>
+              )}             
         </form>
     );
 

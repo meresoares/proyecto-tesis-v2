@@ -2,15 +2,15 @@
 // login-administrador-page.tsx
 
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import loginImage from '../../images/img-login.webp';
-import '../../styles/login.css'
-import LoginFormulario from '../../components/login-component';
+import '../../styles/estilo.css';
+import Login from '../../components/login-component';
 
 const LoginAdmin: React.FC = () => {
-
   return (
     <section className="login-container vh-100">
-      <div className="container py-5 h-100">
+      <div className="container py-4 h-100">
         <div className="row d-flex justify-content-center align-items-center h-100">
           <div className="col col-xl-10">
             <div className="card" style={{ borderRadius: '1rem' }}>
@@ -20,7 +20,7 @@ const LoginAdmin: React.FC = () => {
                 </div>
                 <div className="col-md-6 col-lg-7 d-flex align-items-center">
                   <div className="card-body p-4 p-lg-5 text-black">
-                    <LoginFormulario />
+                    <Login isAdmin={true} />
                   </div>
                 </div>
               </div>

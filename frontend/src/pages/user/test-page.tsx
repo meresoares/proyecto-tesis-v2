@@ -1,6 +1,6 @@
 // src/pages/TestPage.tsx
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '../../services/auth-service';
 import axios from 'axios';
 import Questions from '../../components/questions-component';
@@ -17,6 +17,7 @@ interface Pregunta {
 const TestPage: React.FC = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+
   const API_BASE_URL = 'http://localhost:3001/api';
   const [preguntas, setPreguntas] = useState<Pregunta[]>([]);
   // Estado para almacenar las respuestas del cuestionario
@@ -47,34 +48,36 @@ const TestPage: React.FC = () => {
       checkTestCompletion();
     }
 
+  }, [user, validated]);
+
+  useEffect (() => {
     const fetchPreguntas = async () => {
       setLoading(true);
       try {
-        // Obtener preguntas desde la API
         const response = await axios.get(`${API_BASE_URL}/preguntas`);
         setPreguntas(response.data);
       } catch (error) {
         console.error('Error al obtener las preguntas:', error);
-        // Manejar el error
       } finally {
         setLoading(false);
       }
     };
 
     fetchPreguntas();
-  }, [user, navigate, validated]);
+  }, []);
 
   // Función para manejar el cambio de respuesta
-  const handleChangeRespuesta = (preguntaId: number, respuesta: string) => {
+  const handleChangeRespuesta = useCallback ((preguntaId: number, respuesta: string) => {
     setRespuestas(prevRespuestas => ({
       ...prevRespuestas,
       [preguntaId]: respuesta,
     }));
     setShowAlert(false);
-  };
+  }, []);
 
   const handleNextQuestion = () => {
-    if (respuestas[preguntas[currentQuestionIndex]?.id] === undefined) {
+    const currentPregunta = preguntas[currentQuestionIndex];
+    if (!respuestas[currentPregunta?.id]) {
       setShowAlert(true);
       return;
     }
@@ -127,10 +130,11 @@ const TestPage: React.FC = () => {
     <Layout
       user={user}
       handleLogout={logout}
-      title="Inventario de Fobia Social (Social Phobia Inventory, SPIN)"
-      subtitle="Por favor, indique en qué medida le han molestado los siguientes problemas durante las últimas semanas."
+      title="Inventario de Fobia Social "
+      subtitle="(Social Phobia Inventory, SPIN)"
     >
       <p className="question-text">
+        Por favor, indique en qué medida le han molestado los siguientes problemas durante las últimas semanas.
         Responda con sinceridad y tómese el tiempo que necesite; no se preocupe, ya que no hay respuestas correctas o incorrectas. Su honestidad nos ayudará a proporcionarle la mejor evaluación posible.
       </p>
       {showAlert && (
@@ -158,11 +162,6 @@ const TestPage: React.FC = () => {
                 onChangeRespuesta={handleChangeRespuesta}
                 respuestaActual={respuestas[preguntas[currentQuestionIndex]?.id]}
               />
-            )}
-            {showAlert && (
-              <div className="alert alert-warning" role="alert">
-                Por favor, responde la pregunta antes de continuar.
-              </div>
             )}
             <div className="navigation-buttons text-center">
               <button

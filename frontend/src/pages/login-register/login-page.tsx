@@ -4,8 +4,13 @@
 import loginImage from '../../images/img-login.webp';
 import '../../styles/estilo.css'
 import Login from '../../components/login-component';
+import { useLocation } from 'react-router-dom';
 
 const LoginPage: React.FC = () => {
+  const location = useLocation();
+
+  // Determinar si estamos en la página de login de administrador
+  const isAdminPage = location.pathname === '/login-admin';
 
   return (
     <section className="login-container vh-100">
@@ -19,7 +24,7 @@ const LoginPage: React.FC = () => {
                 </div>
                 <div className="col-md-6 col-lg-7 d-flex align-items-center">
                   <div className="card-body p-4 p-lg-5 text-black">
-                    <Login />
+                    <Login isAdmin={isAdminPage}/>
                   </div>
                 </div>
               </div>

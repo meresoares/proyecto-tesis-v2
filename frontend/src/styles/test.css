@@ -137,6 +137,23 @@ body {
     cursor: not-allowed;
   } 
 
+  .question-text {
+    margin-bottom: 20px; /* Espacio debajo del párrafo */
+  }
+  
+  .alert-warning {
+    margin-bottom: 20px; /* Espacio debajo de la alerta */
+    margin-top: 20px;
+  }
+  
+  .progress-container {
+    margin-bottom: 10px; /* Espacio debajo del contenedor de progreso */
+  }
+  
+  .progress-text {
+    margin-left: 10px; /* Espacio a la izquierda del texto de progreso */
+  }
+
   /* Media queries para adaptarse a pantallas más pequeñas */
 @media (max-width: 600px) {
   .question-container,

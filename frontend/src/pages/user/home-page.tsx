@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/navbar-component';
 import { Login } from '@mui/icons-material';
 import UsuarioPage from './user-page';
+import AdminHomePage from '../administrator/home-admin-page';
 
 const Home: React.FC = () => {
     const authService = useAuth();
@@ -43,7 +44,7 @@ const Home: React.FC = () => {
             {rol === 'Usuario' ? (
                 <UsuarioPage />
             ) : (
-                <Login />
+                <AdminHomePage />
             )}
         </div>
     );

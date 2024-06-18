@@ -12,7 +12,7 @@ interface Pregunta {
 interface QuestionProps {
   pregunta: Pregunta;
   onChangeRespuesta: (preguntaId: number, respuesta: string) => void;
-  respuestaActual: string | undefined;
+  respuestaActual: string;
 }
 
 const opciones = [
@@ -35,8 +35,8 @@ const Questions: React.FC<QuestionProps> = ({ pregunta, onChangeRespuesta, respu
         {opciones.map((opcion) => (
           <button
             key={opcion.value}
-            className={`option-button ${respuestaActual === opcion.value.toString() ? 'selected' : ''}`}
-            onClick={() => handleChange(opcion.value.toString())}
+            className={`option-button ${respuestaActual === opcion.label ? 'selected' : ''}`}
+            onClick={() => handleChange(opcion.label)}
           >
             {opcion.label}
           </button>
